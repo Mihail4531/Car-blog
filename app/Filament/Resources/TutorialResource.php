@@ -6,6 +6,9 @@ use App\Filament\Resources\TutorialResource\Pages;
 use App\Filament\Resources\TutorialResource\RelationManagers;
 use App\Models\Tutorial;
 use Filament\Forms;
+use Filament\Forms\Components\Section;
+use Filament\Forms\Components\Tabs;
+use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
@@ -27,29 +30,44 @@ class TutorialResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('title')
-                    ->required(),
-                Forms\Components\Textarea::make('description')
-                    ->required()
-                    ->columnSpanFull(),
-                Forms\Components\Textarea::make('images')
-                    ->columnSpanFull(),
-                Forms\Components\Textarea::make('stages')
-                    ->columnSpanFull(),
-                Forms\Components\Toggle::make('is_active')
-                    ->required(),
-                Forms\Components\Toggle::make('is_new')
-                    ->required(),
-                Forms\Components\Toggle::make('is_popular')
-                    ->required(),
-                Forms\Components\TextInput::make('meta_title'),
-                Forms\Components\Textarea::make('meta_description')
-                    ->required()
-                    ->columnSpanFull(),
-                Forms\Components\Textarea::make('meta_keywords')
-                    ->required()
-                    ->columnSpanFull(),
-            ]);
+                Tabs::make('Tabs')->schema([
+                    Tabs\Tab::make('Основная информация')->schema([
+                        Forms\Components\TextInput::make('title')
+                            ->label('Название Урока')
+                            ->required(),
+                        Forms\Components\Textarea::make('description')
+                            ->required()
+                            ->columnSpanFull(),
+                        Forms\Components\FileUpload::make('images')
+                            ->image()
+                            ->imageEditor()
+                            ->directory('tutorial')
+                            ->multiple(),
+                        Forms\Components\Repeater::make('stages')->schema([
+                            TextInput::make('title')
+                                ->label('Название этапа'),
+                            TextInput::make('subtitle')
+                                ->label('Описание этапа'),
+                        ])->label('Этапы')
+                        ->columnSpanFull(),
+                    ]),
+                    Tabs\Tab::make('SEO')->schema([
+                        Forms\Components\TextInput::make('meta_title'),
+                        Forms\Components\Textarea::make('meta_description')
+                            ->columnSpanFull(),
+                        Forms\Components\TagsInput::make('meta_keywords')
+                            ->columnSpanFull(),
+                    ]),
+                ])->columnSpan(2),
+                Section::make('')->schema([
+                    Forms\Components\Toggle::make('is_active')
+                        ->required(),
+                    Forms\Components\Toggle::make('is_new')
+                        ->required(),
+                    Forms\Components\Toggle::make('is_popular')
+                        ->required(),
+                ])->columnSpan(1),
+            ])->columns(3);
     }
 
     public static function table(Table $table): Table
