@@ -5,20 +5,27 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\ArticleResource\Pages;
 use App\Filament\Resources\ArticleResource\RelationManagers;
 use App\Models\Article;
+use App\Models\CategoryArticle;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+
+use function Laravel\Prompts\select;
 
 class ArticleResource extends Resource
 {
     protected static ?string $model = Article::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
-
+    protected static ?string $navigationIcon = 'heroicon-o-newspaper';
+    protected static?string $modelLabel ="статья";
+    protected static?string $pluralModelLabel ="статьи";
+    protected static ?string $navigationGroup = "Статьи";
+    protected static ?string $navigationLabel = "Статьи";
     public static function form(Form $form): Form
     {
         return $form
@@ -33,7 +40,7 @@ class ArticleResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('category_article_id')
+                Tables\Columns\TextColumn::make('category.name')
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
@@ -46,7 +53,10 @@ class ArticleResource extends Resource
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                //
+                SelectFilter::make('category_article_id')
+                ->label('Фильтр по категории')
+                ->searchable()
+                ->options(CategoryArticle::where('is_active', true)->pluck('name', 'id')),
             ])
             ->actions([
                 Tables\Actions\ViewAction::make(),

@@ -1,3 +1,3 @@
 <x-app :title="$title">
-    <h1>VSSEM KU</h1>
+    <livewire:article.collection />
 </x-app>
