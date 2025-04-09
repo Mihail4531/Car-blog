@@ -6,7 +6,12 @@ use App\Filament\Resources\ArticleResource\Pages;
 use App\Filament\Resources\ArticleResource\RelationManagers;
 use App\Models\Article;
 use App\Models\CategoryArticle;
+use Doctrine\DBAL\Query\Limit;
 use Filament\Forms;
+use Filament\Forms\Components\Group;
+use Filament\Forms\Components\Section;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Toggle;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
@@ -30,10 +35,50 @@ class ArticleResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('category_article_id')
-                    ->required()
-                    ->numeric(),
-            ]);
+                Group::make()->schema([
+                    Forms\Components\TextInput::make('name')
+                        ->label('Название Урока')
+                        ->required(),
+                    Forms\Components\Textarea::make('content')
+                        ->required()
+                        ->columnSpanFull(),
+                    Forms\Components\FileUpload::make('image')
+                        ->image()
+                        ->imageEditor()
+                        ->directory('article/images')
+                        ->maxFiles(10)
+                        ->multiple(),
+                    Forms\Components\FileUpload::make('documents')
+                        ->acceptedFileTypes([
+                            'applicateion/pdf',
+                            'application/msword',
+                        ])
+                        ->directory('article/document')
+                        ->maxFiles(5)
+                        ->multiple(),
+                    ])->columnSpan(2),
+                Group::make()->schema([
+                    Section::make()->schema([
+                        Section::make()->schema([
+                            Select::make('category_article_id')
+                                ->required()
+                                ->preload()
+                                ->searchable()
+                                ->label('Категория поста')
+                                ->relationship('category', 'name')
+                        ]),
+                        Toggle::make('is_active')
+                            ->label('Актвная статья')
+                            ->default(true),
+                        Toggle::make('is_featured')
+                            ->label('Популярная статья')
+                            ->default(false),
+                        Toggle::make('is_banner')
+                            ->label('Статья будет отбражаться в баннере')
+                            ->default(false),
+                    ]),
+                ])->columnSpan(1),
+            ])->columns(3);
     }
 
     public static function table(Table $table): Table
@@ -42,15 +87,19 @@ class ArticleResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('category.name')
                     ->numeric()
+                    ->label('Категория')
                     ->sortable(),
-                Tables\Columns\TextColumn::make('created_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('updated_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\TextColumn::make('name')
+                    ->label('Название статьи'),
+                Tables\Columns\IconColumn::make('is_active')
+                    ->label('Активная статья')
+                    ->boolean(),
+                Tables\Columns\IconColumn::make('is_featured')
+                    ->label('Популярная статья')
+                    ->boolean(),
+                Tables\Columns\IconColumn::make('is_banner')
+                    ->label('Отображение в баннере')
+                    ->boolean(),
             ])
             ->filters([
                 SelectFilter::make('category_article_id')

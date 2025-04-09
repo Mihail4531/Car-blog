@@ -14,6 +14,8 @@ class Article extends Model
         'is_active' => 'boolean',
         'is_featured' => 'boolean',
         'is_banner' => 'boolean',
+        'image' => 'array',
+        'documents' => 'array',
     ];
 
     public function category()

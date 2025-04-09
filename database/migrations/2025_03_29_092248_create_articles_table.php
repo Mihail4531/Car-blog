@@ -17,7 +17,8 @@ return new class extends Migration
             $table->string('name');
             $table->text('small_text');
             $table->text('content');
-            $table->text('image')->nullable();
+            $table->json('image')->nullable();
+            $table->json('documents')->nullable();
             $table->boolean('is_active')->default(true);
             $table->boolean('is_featured')->default(false);
             $table->boolean('is_banner')->default(false);
