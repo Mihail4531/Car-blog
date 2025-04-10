@@ -103,9 +103,10 @@ class ArticleResource extends Resource
             ])
             ->filters([
                 SelectFilter::make('category_article_id')
-                ->label('Фильтр по категории')
-                ->searchable()
-                ->options(CategoryArticle::where('is_active', true)->pluck('name', 'id')),
+                    ->label('Фильтр по категории')
+                    ->searchable()
+                    ->options(CategoryArticle::where('is_active', true)->pluck('name', 'id')),
+                SelectFilter::make('is_active')
             ])
             ->actions([
                 Tables\Actions\ViewAction::make(),

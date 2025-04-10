@@ -12,6 +12,14 @@ class ArticlesController extends Controller
     {
         return view('articles::index', ['title' => 'Статьи и новости', ]);
     }
+
+    public function showArticles($id){
+        $articles = Article::where('category_article_id', $id)->get();
+        return view('website.categories.show', ['title' => 'Пост',
+        'articles' => $articles,
+        ]);
+    }
+
     public function show($id){
         $article = Article::findOrFail($id);
         $recomendations = Article::whereHas('category', function ($query){
