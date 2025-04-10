@@ -15,7 +15,7 @@ class ArticlesController extends Controller
 
     public function showArticles($id){
         $articles = Article::where('category_article_id', $id)->get();
-        return view('website.categories.show', ['title' => 'Пост',
+        return view('website.categories.show', ['title' => 'Категории',
         'articles' => $articles,
         ]);
     }

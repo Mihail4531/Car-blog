@@ -1,4 +1,5 @@
 <x-app :title="$title">
+    <div class="max-w-[1400px] ml-auto mr-auto">
     <div class="grid grid-cols-3 gap-3">
         @foreach ($articles as $article)
     <div class="max-w-sm bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700">
@@ -32,4 +33,5 @@
 
     @endforeach
     </div>
+</div>
 </x-app>

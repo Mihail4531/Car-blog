@@ -16,6 +16,7 @@ use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Filters\SelectFilter;
+use Filament\Tables\Filters\TernaryFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -106,7 +107,6 @@ class ArticleResource extends Resource
                     ->label('Фильтр по категории')
                     ->searchable()
                     ->options(CategoryArticle::where('is_active', true)->pluck('name', 'id')),
-                SelectFilter::make('is_active')
             ])
             ->actions([
                 Tables\Actions\ViewAction::make(),
