@@ -12,7 +12,8 @@
 <body>
     @include('layout.header')
     {{ $slot }}
-
+    <livewire:order-service.form />
+    @livewireScripts
     <script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
 <script>
   var swiper = new Swiper(".mySwiper", {

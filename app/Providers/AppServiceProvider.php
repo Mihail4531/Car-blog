@@ -23,10 +23,12 @@ class AppServiceProvider extends ServiceProvider
 
 
 
+
         $this->loadViewsFrom(base_path('resources/views/website/articles'),'articles');
     	$this->loadViewsFrom(base_path('resources/views/website/main'), 'main');
 		$this->loadViewsFrom(base_path('resources/views/website/tutorial'), 'tutorial');
 
 			$this->loadViewsFrom(base_path('resources/views/website/contact'), 'contact');
+			$this->loadViewsFrom(base_path('resources/views/website/servise'), 'servise');
 	}
 }
